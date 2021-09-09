@@ -1,0 +1,96 @@
+DROP TABLE IF EXISTS building CASCADE;
+CREATE TABLE IF NOT EXISTS building (
+    id long identity PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    number_of_rooms INT NOT NULL
+);
+
+DROP TABLE IF EXISTS picture CASCADE;
+CREATE TABLE IF NOT EXISTS picture (
+    id long identity PRIMARY KEY,
+     name VARCHAR(255) NOT NULL,
+     building_id long NOT NULL,
+     FOREIGN KEY(building_id) REFERENCES building(id)
+);
+
+DROP TABLE IF EXISTS room CASCADE;
+CREATE TABLE IF NOT EXISTS room (
+    id long identity PRIMARY KEY,
+    room_number INTEGER NOT NULL,
+    capacity INTEGER NOT NULL,
+    number_of_beds INTEGER NOT NULL,
+    building_id long NOT NULL,
+    FOREIGN KEY(building_id) REFERENCES building(id)
+);
+
+DROP TABLE IF EXISTS student CASCADE;
+CREATE TABLE IF NOT EXISTS student (
+    id long identity PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    house_type ENUM('GRYFFINDOR','HUFFLEPUFF','RAVENCLAW','SLYTHERIN') NOT NULL,
+    pet_type  ENUM('CAT','RAT','OWL','NONE') NOT NULL,
+    room_id long NOT NULL,
+    pure_blood boolean NOT NULL,
+    FOREIGN KEY(room_id) REFERENCES room(id)
+);
+
+
+DROP TABLE IF EXISTS recipe CASCADE;
+CREATE TABLE IF NOT EXISTS recipe (
+    id long identity PRIMARY KEY,
+    name VARCHAR(20) NOT NULL,
+    ing1 ENUM('DOG_EAR', 'FROG_SALIVA', 'GOAT_EXCREMENT', 'BIRD_HAIR', 'CAT_TAIL', 'ELEPHANT_TUSK', 'BIRD_FEATHERS', 'BAT_BLOOD', 'MADONNA_ARMPIT_HAIR', 'DONKEY_HOOF') NOT NULL,
+    ing2 ENUM('DOG_EAR', 'FROG_SALIVA', 'GOAT_EXCREMENT', 'BIRD_HAIR', 'CAT_TAIL', 'ELEPHANT_TUSK', 'BIRD_FEATHERS', 'BAT_BLOOD', 'MADONNA_ARMPIT_HAIR', 'DONKEY_HOOF') NOT NULL,
+    ing3 ENUM('DOG_EAR', 'FROG_SALIVA', 'GOAT_EXCREMENT', 'BIRD_HAIR', 'CAT_TAIL', 'ELEPHANT_TUSK', 'BIRD_FEATHERS', 'BAT_BLOOD', 'MADONNA_ARMPIT_HAIR', 'DONKEY_HOOF') NOT NULL,
+    ing4 ENUM('DOG_EAR', 'FROG_SALIVA', 'GOAT_EXCREMENT', 'BIRD_HAIR', 'CAT_TAIL', 'ELEPHANT_TUSK', 'BIRD_FEATHERS', 'BAT_BLOOD', 'MADONNA_ARMPIT_HAIR', 'DONKEY_HOOF') NOT NULL,
+    ing5 ENUM('DOG_EAR', 'FROG_SALIVA', 'GOAT_EXCREMENT', 'BIRD_HAIR', 'CAT_TAIL', 'ELEPHANT_TUSK', 'BIRD_FEATHERS', 'BAT_BLOOD', 'MADONNA_ARMPIT_HAIR', 'DONKEY_HOOF') NOT NULL
+);
+
+DROP TABLE IF EXISTS student_potion CASCADE;
+CREATE TABLE IF NOT EXISTS student_potion (
+    id long  identity PRIMARY KEY,
+    student_id long NOT NULL,
+    potion_id long NOT NULL,
+    FOREIGN KEY(student_id) REFERENCES student(id),
+    FOREIGN KEY(potion_id) REFERENCES recipe(id)
+);
+
+
+DROP TABLE IF EXISTS spell CASCADE;
+CREATE TABLE IF NOT EXISTS spell
+(
+    id long identity PRIMARY KEY,
+    name ENUM('FLY', 'LEVITATE', 'ABRAKADABRA', 'HOCUS_POK', 'LUMOS') NOT NULL,
+    power integer NOT NULL,
+    banned boolean NOT NULL
+);
+
+
+DROP TABLE IF EXISTS wand CASCADE;
+CREATE TABLE IF NOT EXISTS wand
+(
+    id long identity PRIMARY KEY,
+    wood_type ENUM('YELLOW_BIRCH', 'BUTTERNUT', 'BLACK_CHERRY', 'PIN_CHERRY', 'AMERICAN_CHESTNUT') NOT NULL,
+    color_type ENUM('RED', 'BLUE', 'BROWN', 'BLACK', 'RAINBOW', 'YELLOW', 'WHITE', 'GREY') NOT NULL
+);
+
+DROP TABLE IF EXISTS teacher CASCADE;
+CREATE TABLE IF NOT EXISTS teacher (
+    id long identity PRIMARY KEY,
+    name varchar(255) NOT NULL,
+    subject ENUM('MATH', 'HISTORY', 'SPELLS', 'DARK_SPELLS') NOT NULL,
+    witch boolean NOT NULL,
+    age integer NOT NULL,
+    wand_id long UNIQUE,
+    FOREIGN KEY (wand_id) REFERENCES wand(id)
+);
+
+DROP TABLE IF EXISTS wand_spell CASCADE;
+CREATE TABLE IF NOT EXISTS wand_spell
+(
+    wand_id long NOT NULL,
+    spell_id long NOT NULL,
+    FOREIGN KEY (wand_id) REFERENCES wand(id),
+    FOREIGN KEY (spell_id) REFERENCES spell(id)
+);
+

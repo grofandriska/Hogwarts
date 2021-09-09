@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts::header">
+    <title id="title"> Greetings </title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <nav th:include="parts::navbar">
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <h2 align="center" th:text="'Hello, ' + ${name} + '!'"></h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <img src="/img/background.jpg" class="img-fluid">
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts :: header">
+    <title id="title">Create Potions</title>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <nav th:include="parts::navbar">
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <p class="h2 text-center">
+                <th:block th:text="${recipe.id == null ? 'Create Recipe' : 'Update Recipe'}"></th:block>
+            </p>
+            <form th:action="@{/recipes}" th:object="${recipe}" method="post">
+                <input type="hidden" th:field="*{id}">
+                <div class="form-group">
+                    <label for="name">Recipe Name</label>
+                    <input type="text" class="form-control" id="name" aria-describedby="name-help" placeholder="Enter name if you want" th:field="*{name}">
+                    <small id="name-help" class="form-text text-muted">You can give it a name if u want.</small>
+                </div>
+                <div class="form-group">
+                    <label for="ingredient-one">1st Ingredient</label>
+                    <select id="ingredient-one" class="form-select" aria-describedby="ingredient-one-help" th:field="*{ing1}">
+                        <option th:each="ingredient : ${ingredients}" th:value="${ingredient}" th:text="${ingredient.name}"></option>
+                    </select>
+                    <small id="ingredient-one-help" class="form-text text-muted">Select The 1st Ingredient For The Recipe.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="ingredient-two">2nd Ingredient</label>
+                    <select id="ingredient-two" class="form-select" aria-describedby="ingredient-two-help" th:field="*{ing2}">
+                        <option th:each="ingredient : ${ingredients}" th:value="${ingredient}" th:text="${ingredient.name}"></option>
+                    </select>
+                    <small id="ingredient-two-help" class="form-text text-muted">Select The 2nd Ingredient For The Recipe.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="ingredient-three">3rd Ingredient</label>
+                    <select id="ingredient-three" class="form-select" aria-describedby="ingredient-three-help" th:field="*{ing3}">
+                        <option th:each="ingredient : ${ingredients}" th:value="${ingredient}" th:text="${ingredient.name}"></option>
+                    </select>
+                    <small id="ingredient-three-help" class="form-text text-muted">Select The 3rd Ingredient For The Recipe.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="ingredient-four">4th Ingredient</label>
+                    <select id="ingredient-four" class="form-select" aria-describedby="ingredient-four-help" th:field="*{ing4}">
+                        <option th:each="ingredient : ${ingredients}" th:value="${ingredient}" th:text="${ingredient.name}"></option>
+                    </select>
+                    <small id="ingredient-four-help" class="form-text text-muted">Select The 4th Ingredient For The Recipe.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="ingredient-five">5th Ingredient</label>
+                    <select id="ingredient-five" class="form-select" aria-describedby="ingredient-five-help" th:field="*{ing5}">
+                        <option th:each="ingredient : ${ingredients}" th:value="${ingredient}" th:text="${ingredient.name}"></option>
+                    </select>
+                    <small id="ingredient-five-help" class="form-text text-muted">Select The 5th Ingredient For The Recipe.</small>
+                </div>
+
+                <div class="text-center">
+                <input class="btn btn-primary" type="submit" th:value="${recipe.id == null ? 'Save' : 'Update'}"/>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">1st Ingredient</th>
+                    <th scope="col">2nd Ingredient</th>
+                    <th scope="col">3rd Ingredient</th>
+                    <th scope="col">4th Ingredient</th>
+                    <th scope="col">5th Ingredient</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="recipe: ${recipes}">
+                    <th th:text="${recipe.id}"></th>
+                    <td th:text="${recipe.name}"></td>
+                    <td th:text="${recipe.ing1.getName()}"></td>
+                    <td th:text="${recipe.ing2.getName()}"></td>
+                    <td th:text="${recipe.ing3.getName()}"></td>
+                    <td th:text="${recipe.ing4.getName()}"></td>
+                    <td th:text="${recipe.ing5.getName()}"></td>
+                    <td>
+                        <a class="btn btn-secondary" th:href="@{'/recipes/' + ${recipe.id} + '/update'}" role="button">Update</a>
+                        <a class="btn btn-danger" th:href="@{'/recipes/' + ${recipe.id} + '/delete'}" role="button">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

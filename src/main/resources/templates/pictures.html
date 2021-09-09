@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts::header">
+    <title id="title"> Pictures </title>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <nav th:include="parts::navbar">
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <p class="h2 text-center">
+                <th:block th:text="${picture.id == null ? 'Create Picture' : 'Update Picture'}"></th:block>
+            </p>
+            <form th:object="${picture}" th:action="@{/pictures}" method="POST">
+                <input type="hidden" th:field="*{id}">
+                <div class="form-group">
+                    <label for="picture-title">Picture Title</label>
+                    <input type="text" class="form-control" id="picture-title" aria-describedby="picture-title-help" placeholder="Enter Title" th:field="*{name}">
+                    <small id="picture-title-help" class="form-text text-muted">Give it a nice name.</small>
+                </div>
+                <div class="form-group">
+                    <label for="buildings">Building</label>
+                    <select id="buildings" class="form-select" aria-describedby="building-help" th:field="*{buildingId}">
+                        <option th:each="building : ${buildings}" th:value="${building.id}" th:text="${building.name}"></option>
+                    </select>
+                    <small id="building-help" class="form-text text-muted">Select the building for the picture.</small>
+                </div>
+                <div class="text-center">
+                    <input class="btn btn-primary" type="submit" th:value="${picture.id == null ? 'Save' : 'Update'}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Placed In</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="picture: ${pictures}">
+                        <th th:text="${picture.id}"></th>
+                        <td th:text="${picture.name}"></td>
+                        <td th:text="${picture.building.name}"></td>
+                        <td>
+                            <a class="btn btn-secondary" th:href="@{'/pictures/' + ${picture.id} + '/update'}" role="button">Update</a>
+                            <a class="btn btn-danger" th:href="@{'/pictures/' + ${picture.id} + '/delete'}" role="button">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

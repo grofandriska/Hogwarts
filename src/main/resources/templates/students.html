@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts::header">
+    <title id="title"> Students </title>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <nav th:include="parts::navbar">
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <p class="h2 text-center">
+                <th:block th:text="${student.id == null ? 'Create Student' : 'Update Student'}"></th:block>
+            </p>
+            <form th:object="${student}" th:action="@{/students}" method="POST">
+                <input type="hidden" th:field="*{id}">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" class="form-control" id="name" aria-describedby="name-help" placeholder="Enter Title" th:field="*{name}">
+                    <small id="name-help" class="form-text text-muted">eg. John Wick</small>
+                </div>
+                <div class="form-group">
+                    <label for="house">House</label>
+                    <select id="house" class="form-select" aria-describedby="house-help" th:field="*{houseType}">
+                        <option th:each="house : ${houseTypes}" th:value="${house}" th:text="${house.name}"></option>
+                    </select>
+                    <small id="house-help" class="form-text text-muted">Select a House.</small>
+                </div>
+                <div class="form-group">
+                    <label for="pet">Pet</label>
+                    <select id="pet" class="form-select" aria-describedby="pet-help" th:field="*{petType}">
+                        <option th:each="pet : ${petTypes}" th:value="${pet}" th:text="${pet.name}"></option>
+                    </select>
+                    <small id="pet-help" class="form-text text-muted">Select a Pet.</small>
+                </div>
+                <div class="form-group">
+                    <label for="room">Building and Room</label>
+                    <select id="room" class="form-select" aria-describedby="room-help" th:field="*{roomId}">
+                        <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.building.name} + ' and Room: ' + ${room.roomNumber}"></option>
+                    </select>
+                    <small id="room-help" class="form-text text-muted">Select a Building and Room.</small>
+                </div>
+                <div class="form-group">
+                    <label for="blood">Pure Blood</label>
+                    <select id="blood" class="form-select" aria-describedby="blood-help" th:field="*{pureBlood}">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                    <small id="blood-help" class="form-text text-muted">Your blood is pure?</small>
+                </div>
+                <div class="text-center">
+                    <input class="btn btn-primary" type="submit" th:value="${student.id == null ? 'Save' : 'Update'}" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">House</th>
+                        <th scope="col">Pet</th>
+                        <th scope="col">Building</th>
+                        <th scope="col">Room Number</th>
+                        <th scope="col">Has Pure Blood</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="student: ${students}">
+                        <th th:text="${student.id}"></th>
+                        <td th:text="${student.name}"></td>
+                        <td th:text="${student.houseType.getName()}"></td>
+                        <td th:text="${student.petType.getName() == 'None' ? '-' : student.petType.name}"></td>
+                        <td th:text="${student.room.building.name}"></td>
+                        <td th:text="${student.room.getRoomNumber()}"></td>
+                        <td th:text="${student.isPureBlood} == true ? 'Yes' : 'No'"></td>
+                        <td>
+                            <a class="btn btn-secondary" th:href="@{'/students/' + ${student.id} + '/update'}" role="button">Update</a>
+                            <a class="btn btn-danger" th:href="@{'/students/' + ${student.id} + '/delete'}" role="button">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

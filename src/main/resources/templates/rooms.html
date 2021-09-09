@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts::header">
+    <title id="title"> Rooms </title>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <nav th:include="parts::navbar">
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <p class="h2 text-center">
+                <th:block th:text="${room.id == null ? 'Create Room' : 'Update Room'}"></th:block>
+            </p>
+            <form th:object="${room}" th:action="@{/rooms}" method="POST">
+
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-group">
+                    <label for="number">Room Number</label>
+                    <input type="number" class="form-control" id="number" aria-describedby="number-help" placeholder="5" min="1" max="99" step="1" th:field="*{roomNumber}">
+                    <small id="number-help" class="form-text text-muted">Room Number Between 1 And 99.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="capacity">Capacity</label>
+                    <input type="number" class="form-control" id="capacity" aria-describedby="capacity-help" placeholder="5" min="1" max="20" step="1" th:field="*{capacity}" />
+                    <small id="capacity-help" class="form-text text-muted">A Number Between 1 And 20.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="beds">Number of Beds</label>
+                    <input type="number" class="form-control" id="beds" aria-describedby="beds-help" placeholder="5" min="1" max="20" step="1" th:field="*{numberOfBeds}" />
+                    <small id="beds-help" class="form-text text-muted">A Number Between 1 And 20.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="buildings">Building</label>
+                    <select id="buildings" class="form-select" aria-describedby="room-help" th:field="*{buildingId}">
+                        <option th:each="building : ${buildings}" th:value="${building.id}" th:text="${building.name}"></option>
+                    </select>
+                    <small id="room-help" class="form-text text-muted">Select A Building For The Room.</small>
+                </div>
+
+                <div class="text-center">
+                    <input class="btn btn-primary" type="submit" th:value="${room.id == null ? 'Save' : 'Update'}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th scope="col">Building</th>
+                    <th scope="col">Room number</th>
+                    <th scope="col">Capacity</th>
+                    <th scope="col">Number Of Beds</th>
+                    <th scope="col">Residents</th>
+                    <th scope="col">Has empty beds?</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="room: ${rooms}">
+                    <th class="scope" th:text="${room.getId()}"></th>
+                    <td th:text="${room.building.name}"></td>
+                    <td th:text="${room.getRoomNumber()}"></td>
+                    <td th:text="${room.getCapacity()}"></td>
+                    <td th:text="${room.getNumberOfBeds()}"></td>
+                    <td th:if="${#lists.size(room.getResidents()) > 2}">
+                        <div style="height:100px;overflow:auto;">
+                            <th:block th:each="student, iterStat : ${room.getResidents()}"
+                                      th:utext="${iterStat.index} > 0 ? '<hr/>' + ${student.getName()} : ${student.getName()}">
+                            </th:block>
+                        </div>
+                    </td>
+                    <td th:unless="${#lists.size(room.getResidents()) > 2}">
+                        <div>
+                            <th:block th:each="student, iterStat : ${room.getResidents()}"
+                                      th:utext="${iterStat.index} > 0 ? '<hr/>' + ${student.getName()} : ${student.getName()}">
+                            </th:block>
+                        </div>
+                    </td>
+                    <td th:text="${room.hasEmptyBed()} == true ? 'Yes' : 'No'"></td>
+                    <td>
+                        <a class="btn btn-secondary" th:href="@{'/rooms/' + ${room.id} + '/update'}" role="button">Update</a>
+                        <a class="btn btn-danger" th:href="@{'/rooms/' + ${room.id} + '/delete'}" role="button">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
